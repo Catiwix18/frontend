@@ -1,0 +1,18 @@
+.invalid-feedback {
+  display: none;
+}
+
+input.ng-invalid.ng-touched ~ .invalid-feedback,
+textarea.ng-invalid.ng-touched ~ .invalid-feedback {
+  display: block;
+}
+
+input.ng-valid.ng-touched,
+textarea.ng-valid.ng-touched {
+  border-color: #28a745;
+}
+
+input.ng-invalid.ng-touched,
+textarea.ng-invalid.ng-touched {
+  border-color: #dc3545;
+}

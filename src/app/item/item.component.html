@@ -1,0 +1,164 @@
+<div style="background-image: url('https://png.pngtree.com/background/20210714/original/pngtree-old-movie-background-pictures-picture-image_1218119.jpg'); background-size: cover; background-position: center">
+  <div class="container mt-4" >
+    <!-- Sección para crear una nueva película -->
+    <div class="card mb-4">
+      <div class="card-header bg-info text-black d-flex justify-content-center align-items-center">
+        <h3>Agregar Nueva Película</h3>
+      </div>
+      <div class="card-body">
+        <form (ngSubmit)="createItem()" enctype="multipart/form-data">
+          <div class="form-group">
+            <label for="title">Título</label>
+            <input type="text" class="form-control" id="title" [(ngModel)]="currentItem.title" name="title" required>
+          </div>
+          <div class="form-group">
+            <label for="director">Director</label>
+            <input type="text" class="form-control" id="director" [(ngModel)]="currentItem.director" name="director" required>
+          </div>
+          <div class="form-group">
+            <label for="genre">Género</label>
+            <select class="form-control" id="genre" [(ngModel)]="currentItem.genres" name="genres" multiple required>
+              <option value="Acción">Acción</option>
+              <option value="Comedia">Comedia</option>
+              <option value="Drama">Drama</option>
+              <option value="Fantasía">Fantasía</option>
+              <option value="Ciencia Ficción">Ciencia Ficción</option>
+              <option value="Romance">Romance</option>
+              <option value="Terror">Terror</option>
+              <option value="Animación">Animación</option>
+              <option value="Documental">Documental</option>
+              <option value="Aventura">Aventura</option>
+              <option value="Thriller">Thriller</option>
+              <option value="Suspenso">Suspenso</option>
+            </select>
+          </div>
+
+
+
+          <div class="form-group">
+            <label for="year">Año</label>
+            <input type="number" class="form-control" id="year" [(ngModel)]="currentItem.year" name="year" required>
+          </div>
+          <div class="form-group">
+            <label for="rating">Calificación</label>
+            <input type="number" class="form-control" id="rating" [(ngModel)]="currentItem.rating" name="rating" step="0.1" required>
+          </div>
+          <div class="form-group">
+            <label for="description">Descripción</label>
+            <textarea class="form-control" id="description" [(ngModel)]="currentItem.description" name="description" rows="3" required></textarea>
+          </div>
+          <div class="form-group">
+            <label for="duration">Duración (minutos)</label>
+            <input type="number" class="form-control" id="duration" [(ngModel)]="currentItem.duration" name="duration" required>
+          </div>
+          <div class="form-group">
+            <label for="language">Idioma</label>
+            <select class="form-control" id="language" [(ngModel)]="currentItem.language" name="language" required>
+              <option value="Español">Español</option>
+              <option value="Inglés">Inglés</option>
+              <option value="Francés">Francés</option>
+              <option value="Alemán">Alemán</option>
+              <option value="Italiano">Italiano</option>
+              <option value="Portugués">Portugués</option>
+              <option value="Chino">Chino</option>
+              <option value="Japonés">Japonés</option>
+              <option value="Coreano">Coreano</option>
+              <option value="Ruso">Ruso</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label for="releaseDate">Fecha de Lanzamiento</label>
+            <input type="date" class="form-control" id="releaseDate" [(ngModel)]="currentItem.releaseDate" name="releaseDate" required>
+          </div>
+          <hr>
+          <div class="form-group">
+            <label for="image">Imagen</label>
+            <input type="file" class="form-control-file" id="image" (change)="onFileSelected($event)" name="image">
+          </div>
+          <hr>
+          <div class="form-group d-flex justify-content-center">
+            <button type="submit" class="btn btn-outline-success">Agregar Película</button>
+          </div>
+
+        </form>
+      </div>
+    </div>
+
+    <!-- Sección para listar, buscar y filtrar las películas -->
+    <div class="card">
+      <div class="card-header bg-secondary text-white">
+        <h3>Lista de Películas</h3>
+        <div class="form-inline mt-2">
+          <input type="text" class="form-control mr-2" placeholder="Buscar por título" [(ngModel)]="searchTerm" (input)="searchItems()">
+          <select class="form-control" [(ngModel)]="sortField" (change)="sortItems()" id="sortField" title="Ordenar por">
+            <option value="title">Título</option>
+            <option value="director">Director</option>
+            <option value="year">Año</option>
+            <option value="rating">Calificación</option>
+          </select>
+
+        </div>
+      </div>
+      <div class="card-body">
+        <div *ngFor="let item of filteredItems" class="card mb-3">
+          <div class="row no-gutters">
+            <div class="col-md-4">
+              <img [src]="'http://localhost:3000/uploads/' + item.image" class="card-img" alt="Imagen">
+            </div>
+            <div class="col-md-8">
+              <div class="card-body">
+                <h5 class="card-title">{{ item.title }}</h5>
+                <p class="card-text"><strong>Director:</strong> {{ item.director }}</p>
+                <p class="card-text"><strong>Género:</strong> {{ item.genre }}</p>
+                <p class="card-text"><strong>Año:</strong> {{ item.year }}</p>
+                <p class="card-text"><strong>Calificación:</strong> {{ item.rating }}</p>
+                <p class="card-text"><strong>Descripción:</strong> {{ item.description }}</p>
+                <p class="card-text"><strong>Duración:</strong> {{ item.duration }} minutos</p>
+                <p class="card-text"><strong>Idioma:</strong> {{ item.language }}</p>
+                <p class="card-text"><strong>Fecha de Lanzamiento:</strong> {{ item.releaseDate | date }}</p>
+                <button class="btn btn-primary mr-2" (click)="openEditModal(item._id)">Editar</button>
+                <button class="btn btn-danger" (click)="deleteItem(item._id)">Eliminar</button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="modal" *ngIf="showModal" tabindex="-1" role="dialog">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header bg-info text-white">
+        <h5 class="modal-title">Editar Película</h5>
+        <button type="button" class="close" aria-label="Close" (click)="closeEditModal()">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <!-- Formulario de edición -->
+          <!-- Campos de formulario para la edición -->
+        <form (ngSubmit)="updateItem()" enctype="multipart/form-data">
+          <div class="form-group">
+            <label for="editTitle">Título</label>
+            <input type="text" class="form-control" id="editTitle" [(ngModel)]="currentItem.title" name="title" required>
+          </div>
+          <div class="form-group">
+            <label for="editDirector">Director</label>
+            <input type="text" class="form-control" id="editDirector" [(ngModel)]="currentItem.director" name="director" required>
+          </div>
+          <div class="form-group">
+            <label for="editGenres">Género</label>
+            <select class="form-control" id="editGenres" [(ngModel)]="currentItem.genres" name="genres" multiple required>
+              <!-- Opciones de género -->
+              <option *ngFor="let genre of genresList" [value]="genre">{{ genre }}</option>
+            </select>
+          </div>
+          <!-- Resto de los campos de edición -->
+          <button type="submit" class="btn btn-outline-success">Actualizar Película</button>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>
